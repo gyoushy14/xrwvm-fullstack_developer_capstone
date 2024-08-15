@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const fs = require('fs');
-const  cors = require('cors')
+const cors = require('cors')
 const app = express()
 const port = 3030;
 
@@ -58,18 +58,50 @@ app.get('/fetchReviews/dealer/:id', async (req, res) => {
 
 // Express route to fetch all dealerships
 app.get('/fetchDealers', async (req, res) => {
-//Write your code here
+try {
+    const documents = await Dealerships.find();
+    res.json(documents);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching documents' });
+  }
 });
 
 // Express route to fetch Dealers by a particular state
 app.get('/fetchDealers/:state', async (req, res) => {
 //Write your code here
+
+    const state = req.params.state.toUpperCase();  
+    const dealersInState = dealers.filter(dealer => dealer.state === state);
+
+    if (dealersInState.length > 0) {
+        res.status(200).json(dealersInState);
+    } else {
+        res.status(404).json({ message: `No dealers found in state ${state}` });
+    }
 });
+
 
 // Express route to fetch dealer by a particular id
 app.get('/fetchDealer/:id', async (req, res) => {
 //Write your code here
-});
+
+app.get('/fetchDealer/:id', async (req, res) => {
+    try {
+        const dealerId = req.params.id;  // الحصول على المعرف من المسار
+        let document = await Dealerships.findById(dealerId);
+
+        if (document) {
+            res.json(document);
+        } else {
+            res.status(404).json({ error: 'Dealer not found' });  // رسالة خطأ في حالة عدم العثور على الوكيل
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching document' });  // التعامل مع أي خطأ يحدث أثناء البحث
+    }
+}); res.status(500).json({ error: 'Error fetching documents' });
+  }
+});res.json(documents);Dealerships.findById();DealershDeaal
+
 
 //Express route to insert review
 app.post('/insert_review', express.raw({ type: '*/*' }), async (req, res) => {
